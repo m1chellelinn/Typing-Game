@@ -3,7 +3,17 @@ import time
 
 class TypingTracker (object):
     
-    def __init__(self, wordString):
+    def __init__(self, wordCount, words100, words3000):
+        wordString = ""
+
+        for i in range(0, wordCount):
+            if i % 2 == 1:
+                wordString += (random.choice(words3000)).strip() + ' '
+            else:
+                wordString += (random.choice(words100)).strip() + ' '
+        
+        wordString = wordString.strip()
+        
         self.index = 0
         self.correctWordString = wordString
         self.numChars = len(self.correctWordString)
@@ -75,13 +85,3 @@ def initializeFiles():
     
     return (words100, words3000)
 
-def initializeString(wordCount, words100, words3000):
-    wordString = ""
-
-    for i in range(0,wordCount):
-        if i % 2 == 1:
-            wordString += (random.choice(words3000)).strip() + ' '
-        else:
-            wordString += (random.choice(words100)).strip() + ' '
-    
-    return TypingTracker(wordString.strip())

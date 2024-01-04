@@ -1,0 +1,2 @@
+coverage==7.4.0
+customtkinter==5.2.1

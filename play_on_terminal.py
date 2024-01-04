@@ -5,10 +5,8 @@ from typing_game import *
 
 if __name__ == '__main__':
     clearTerminal = lambda: os.system('cls')
-
     (words100, words3000) = initializeFiles()
-
-
+    
     while True:
         # Gets if the user wants to play another round
         clearTerminal()
@@ -22,7 +20,7 @@ if __name__ == '__main__':
 
         # Initializes the string and terminal to prepare to start the game
         clearTerminal()
-        myTracker = initializeString(wordsCount, words100, words3000)
+        myTracker = TypingTracker(wordsCount, words100, words3000)
         print('v\n' + "\033[2m{}\033[00m".format(myTracker.correctWordString) + '\n^\n')
         print(f'Starting game with {wordsCount} words. Type the words above as fast as you can!')
 
