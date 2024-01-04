@@ -69,7 +69,32 @@ class TypingTracker (object):
         numCorrect = 0
         for correct in self.currentCorrectChars:
             if correct: numCorrect += 1
-        return (self.keyStrokeTimes[-1] - self.keyStrokeTimes[0], self.totalTypos, self.totalTypos / self.totalKeyStrokes, numCorrect / self.numChars)
+        return (self.keyStrokeTimes[-1] - self.keyStrokeTimes[0], 
+                self.totalTypos, self.totalTypos / self.totalKeyStrokes, 
+                numCorrect / self.numChars)
+    
+    def reset(self, wordCount, words100, words3000):
+        # This is basically just a repeat of the constructor, without creating a new object
+        wordString = ""
+        for i in range(0, wordCount):
+            if i % 2 == 1:
+                wordString += (random.choice(words3000)).strip() + ' '
+            else:
+                wordString += (random.choice(words100)).strip() + ' '
+        wordString = wordString.strip()
+        self.index = 0
+        self.correctWordString = wordString
+        self.numChars = len(self.correctWordString)
+        self.currentWordString = ''
+        self.currentCorrectChars = []
+        for i in range(0,self.numChars):
+            self.currentCorrectChars.append(True)
+        self.totalTypos = 0
+        self.totalKeyStrokes = 0
+        self.keyStrokeTimes = []
+        for i in range(0,self.numChars):
+            self.keyStrokeTimes.append(0)
+
 
     
 def initializeFiles():

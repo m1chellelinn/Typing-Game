@@ -3,8 +3,7 @@ import tkinter
 from typing_game import *
 
 def processInput(char, action):
-        if (myTracker.index >= myTracker.numChars):
-            return False
+        
 
         if (action == '0'):
             myTracker.processInput('del')
@@ -35,17 +34,38 @@ def processInput(char, action):
         outputBox.tag_add('cursor', f'1.{myTracker.index}', f'1.{myTracker.index + 1}')
 
         # we have to return True or False here, as part of the requirement for CustomTKInter's Text Validation
-         
-
-        # call function to open new window and display stats
-
-        return True
+        if (myTracker.index >= myTracker.numChars - 1):
+            # call function to open new window and display stats
+            feedbackWindow = customtkinter.CTkToplevel()
+            feedbackLabel = customtkinter.CTkLabel(feedbackWindow, text="aaaaa")
+            feedbackLabel.pack()
+            restartButton = customtkinter.CTkButton(feedbackWindow, text="restart?", command=restartGame)
+            restartButton.pack()
+            return False
+        else:
+            return True
     
 def updateWordCountLabel(wordCount):
     wordCountLabel.configure(text="Current word count: " + '{:.0f}'.format(wordCount))
 
 def restartGame():
-    print("Select word count = " + '{:.0f}'.format(wordCountSlider.get()))
+    # stage 1: remove all colour tags, text from textbox, textentry
+    outputBox.configure(state=tkinter.NORMAL)
+    outputBox.tag_remove('red','1.0','end')
+    outputBox.tag_remove('grey', '1.0', 'end')
+    outputBox.tag_remove('cursor', '1.0', 'end')
+    outputBox.delete('1.0', 'end')
+    inputEntry.delete('0', 'end')
+
+    # stage 2: reset the myTracker object with a new word count 
+    wordCount = int(wordCountSlider.get())
+    myTracker.reset(wordCount, words100, words3000)
+    
+    # stage 3: rebuild textbox with the new Tracker's string
+    outputBox.insert('end', myTracker.correctWordString)
+    outputBox.tag_add('cursor', '1.0', '1.1')
+    outputBox.tag_add('grey', '1.0', 'end')
+    outputBox.configure(state=tkinter.DISABLED)
 
 def switchLightAndDark(choice):
     if (choice == "Light"):
@@ -77,8 +97,7 @@ if __name__ == '__main__':
     inputEntry.configure(validatecommand=(validationCommandName, '%S', '%d'))
     inputEntry.pack()
 
-    outputBox = customtkinter.CTkTextbox(frame, font=('Calibri', 28))
-
+    outputBox = customtkinter.CTkTextbox(frame, font=('Calibri', 28), width=500, height=200)
     outputBox.insert('end', myTracker.correctWordString)
     outputBox.tag_config('red', foreground='red', underline = 1)
     outputBox.tag_config('grey', foreground='grey', underline = 0)
