@@ -17,6 +17,7 @@ class TypingTracker (object):
         self.index = 0
         self.correctWordString = wordString
         self.numChars = len(self.correctWordString)
+        self.wordCount = wordCount
 
         # CurrentWordString: everything the user has typed until now
         # CurrentCorrecChars: did the user type everything correctly?
@@ -39,7 +40,7 @@ class TypingTracker (object):
 
         if input == 'del':
             if self.index > 0:
-                self.index -= 1                            # FIXME: need to fix this if condition. Maybe update the currentWordString as well?
+                self.index -= 1
                 self.currentWordString = self.currentWordString[0:self.index]
         elif input == ' ':
             self.currentCorrectChars[self.index] = True if (self.correctWordString[self.index] == ' ') else False
@@ -57,20 +58,27 @@ class TypingTracker (object):
             self.keyStrokeTimes[self.index] = time.time()
             
             self.index += 1
+        # This is a cheat code
+        elif input == '`':
+            self.currentWordString += input
+            self.keyStrokeTimes[self.index] = time.time()
+            self.index += 1
 
         # else do nothing: this input is not important
             
     def calculateStats(self):
         # returns a tuple where: 
         # - the first element is the total elapsed time, 
-        # - the second element is the number of typos made, 
-        # - the third element is the percentage of correct keystrokes
-        # - the fourth element is the percentage of correct characters (at the end of the game)
+        # - the second element is the (average) words typed per minute
+        # - the third element is the number of typos made, 
+        # - the fourth element is the percentage of correct keystrokes
+        # - the fifth element is the percentage of correct characters (at the end of the game)
         numCorrect = 0
         for correct in self.currentCorrectChars:
             if correct: numCorrect += 1
-        return (self.keyStrokeTimes[-1] - self.keyStrokeTimes[0], 
-                self.totalTypos, self.totalTypos / self.totalKeyStrokes, 
+        return ((self.keyStrokeTimes[-1] - self.keyStrokeTimes[0]), 
+                self.wordCount / (self.keyStrokeTimes[-1] - self.keyStrokeTimes[0]) * 60,
+                self.totalTypos, 1 - self.totalTypos / self.totalKeyStrokes, 
                 numCorrect / self.numChars)
     
     def reset(self, wordCount, words100, words3000):
@@ -85,6 +93,7 @@ class TypingTracker (object):
         self.index = 0
         self.correctWordString = wordString
         self.numChars = len(self.correctWordString)
+        self.wordCount = wordCount
         self.currentWordString = ''
         self.currentCorrectChars = []
         for i in range(0,self.numChars):

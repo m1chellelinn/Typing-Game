@@ -59,12 +59,12 @@ if __name__ == '__main__':
             print("\033[1m{}\033[00m".format(outputUpper) + '\n' + outputMiddleLeft + "\033[2m{}\033[00m".format(outputMiddleRight) + '\n' + "\033[1m{}\033[00m".format(outputLower))
         
         clearTerminal()
-        (totalTime, totalTypos, ratioTypos, finalRatioCorrects) = myTracker.calculateStats()
+        (totalTime, wordsPerMinute, totalTypos, ratioTypos, finalRatioCorrects) = myTracker.calculateStats()
         print(
             f"Stats:\n- Total elapsed time: {'{:.2f}'.format(totalTime)} seconds\n" + 
-            f"- Word-per-minute: {'{:.2f}'.format(wordsCount / totalTime * 60)} words/min\n" + 
+            f"- Word-per-minute: {'{:.2f}'.format(wordsPerMinute)} words/min\n" + 
             f"- Number of typos made: {totalTypos}\n" + 
-            f"- Percentage of correct inputs: {'{:.2f}'.format(100 - ratioTypos * 100)}%\n" + 
+            f"- Percentage of correct inputs: {'{:.2f}'.format(ratioTypos * 100)}%\n" + 
             f"- Percentage of correct (final) characters: {'{:.2f}'.format(finalRatioCorrects * 100)}%\n")
         
         print("Press any key to continue!")
