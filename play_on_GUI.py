@@ -54,16 +54,19 @@ def processInput(char, action):
         # then at index, mark it with the cursor tag (orange background)
         outputBox.tag_add('cursor', f'1.{myTracker.index}', f'1.{myTracker.index + 1}')
 
+        # then update the progress label with the new count of characters
+        progressLabel.configure(text = f"{myTracker.index} / {myTracker.numChars}")
+
         # we have to return True or False here, as part of the requirement for CustomTKInter's Text Validation
         if (myTracker.index >= myTracker.numChars):
             # call function to display stats
             (totalTime, wordsPerMinute, numTypos, percentCorrectStrokes, percentCorrectChars) = myTracker.calculateStats()
             feedbackDescription.configure(text = 
-                                    f"- total elapsed time: {'{:.2f}'.format(totalTime)} seconds\n" + 
-                                    f"- Word-per-minute: {'{:.2f}'.format(wordsPerMinute)} words/min\n" + 
-                                    f"- Number of typos made: {numTypos}\n" + 
+                                    f"- Total elapsed time: {'{:.2f}'.format(totalTime)} seconds\n" + 
+                                    f"- WPM: {'{:.2f}'.format(wordsPerMinute)} words/min\n" + 
+                                    f"- Number of typos: {numTypos}\n" + 
                                     f"- Correct inputs: {'{:.2f}'.format(percentCorrectStrokes * 100)}%\n" + 
-                                    f"- Correct (final) characters: {'{:.2f}'.format(percentCorrectChars * 100)}%\n")
+                                    f"- Correct final characters: {'{:.2f}'.format(percentCorrectChars * 100)}%\n")
             return False
         return True
     
@@ -89,6 +92,8 @@ def restartGame():
     outputBox.tag_add('cursor', '1.0', '1.1')
     outputBox.tag_add('grey', '1.0', 'end')
     outputBox.configure(state=tkinter.DISABLED)
+
+    progressLabel.configure(text = f"{myTracker.index} / {myTracker.numChars}")
 
     inputEntry.focus_force()
 
@@ -122,7 +127,7 @@ if __name__ == '__main__':
 
 # Creates the left sidebar's frame. This acts as a visual separator and is nice to look at
     leftSidebarFrame = customtkinter.CTkFrame(mainWindow, width=140, corner_radius=0, bg_color=(LGIHT_GRAY,DARK_GRAY))
-    leftSidebarFrame.grid(row = 0, column = 0, sticky = 'nsew')
+    leftSidebarFrame.grid(row = 0, column = 0, sticky = 'nsew', rowspan=2)
     leftSidebarFrame.grid_rowconfigure(2, weight=1)
 
 
@@ -150,11 +155,11 @@ if __name__ == '__main__':
     wordCountLabel.grid(row = 3, column = 0, sticky = 'w', padx = 20, pady = 0)
 
     wordCountSlider = customtkinter.CTkSlider(leftSidebarFrame, button_color=(DEEP_BLUE, DEEP_YELLOW), 
-                                              from_=1, to=40, number_of_steps=39, command=updateWordCountLabel)
+                                              from_=1, to=50, number_of_steps=49, command=updateWordCountLabel)
     wordCountSlider.grid(row = 4, column = 0, sticky = 'w', padx = 20, pady = 0)
     wordCountSlider.set(15)
 
-    wordCountSetButton = customtkinter.CTkButton(leftSidebarFrame, corner_radius=13, border_width=3, 
+    wordCountSetButton = customtkinter.CTkButton(leftSidebarFrame, corner_radius=13, border_width=2, 
                                                  border_color=(DEEP_BLUE, DEEP_YELLOW), fg_color='transparent', hover_color=(LIGHT_BLUE,LIGHT_YELLOW),
                                                  text="Restart", text_color = (DEEP_BLUE, DEEP_YELLOW), font = ("Consolas", 28), 
                                                  command = restartGame)
@@ -162,7 +167,7 @@ if __name__ == '__main__':
     
 
 
-# This is the meat of my implementation.
+# This is the heart of my implementation.
 # This is where the user input gets taken by the TypingTracker class and outputted in real time with text highlighting
 # CustomTKInter does not offer a widget that lets me take inputs AND format its text in real time,
 # so I had to split this functionality in two parts.
@@ -177,7 +182,7 @@ if __name__ == '__main__':
     inputEntry.grid(row = 0, column = 1, sticky = 'nw', padx=50, pady=50)
 
 # The second part is the output box, where we print out the "graded" text that we get from TypingTracker
-    outputBox = customtkinter.CTkTextbox(mainWindow, corner_radius=10, wrap='word', border_spacing=30,
+    outputBox = customtkinter.CTkTextbox(mainWindow, corner_radius=10, wrap='word', border_spacing=100,
                                          fg_color=(WHITE, DARK_DARK_GRAY), font=('Consolas', 28), text_color = (DEEP_BLUE, WHITE))
     outputBox.insert('end', myTracker.correctWordString)
     outputBox.tag_config('red', foreground=WARNING_RED, underline = 1)
@@ -188,12 +193,16 @@ if __name__ == '__main__':
     outputBox.configure(state=tkinter.DISABLED)
     outputBox.grid(row = 0, column = 1, padx=7,pady=7, sticky = 'nsew')
 
-
+# Creates a character counter, keeping track of how many characters the user has typed.
+    progressLabel = customtkinter.CTkLabel(mainWindow, bg_color=(WHITE,DARK_DARK_GRAY), fg_color='transparent',
+                                           font = ("Consolas", 20), text_color = (DEEP_BLUE,DEEP_YELLOW), 
+                                           text = f"{myTracker.index} / {myTracker.numChars}", )
+    progressLabel.grid(row = 0, column = 1, sticky = 's', pady=70)
 
 # Creates the right sidebar's frame. This is another visual separator, nice to look at.
 # The following three widgets fit inside this frame
     rightSidebarFrame = customtkinter.CTkFrame(mainWindow, width = 200, corner_radius=0, bg_color=(WHITE, DARK_GRAY))
-    rightSidebarFrame.grid(row = 0, column = 2, sticky = 'nsew')
+    rightSidebarFrame.grid(row = 0, column = 2, sticky = 'nsew', rowspan=2)
     rightSidebarFrame.rowconfigure(1, weight=1)
 
 # A label with the title "Stats from last round"
@@ -206,7 +215,7 @@ if __name__ == '__main__':
     
 
 # A dropdown menu that the user can use to select the appearance (light/dark) of this app
-    appearanceSelector = customtkinter.CTkComboBox(rightSidebarFrame, corner_radius=13, border_width=3,
+    appearanceSelector = customtkinter.CTkComboBox(rightSidebarFrame, corner_radius=13, border_width=2,
                                                    border_color=(DEEP_BLUE,DEEP_YELLOW), fg_color=(WHITE, DARK_GRAY), button_hover_color=(LIGHT_BLUE,LIGHT_YELLOW),
                                                    font = ("Consolas", 28), text_color = (DEEP_BLUE, DEEP_YELLOW), 
                                                    values=["Light", "Dark"], command=switchLightAndDark, state='readonly')
