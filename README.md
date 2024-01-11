@@ -1,5 +1,5 @@
 # Typing Game in Python, by Lisong (Michael) Lin
-![](https://github.com/m1chellelinn/Typing-Game/blob/main/game%20showcase.gif)
+![](https://i.imgur.com/g4uCmDl.gif)
 
 
 ## About
