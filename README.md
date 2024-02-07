@@ -1,6 +1,7 @@
 # Typing Game in Python, by Lisong (Michael) Lin
 ![](https://i.imgur.com/g4uCmDl.gif)
 
+(I apologize for the poor quality of this GIF)
 
 ## About
 This project is a typing test-style mini game, originally inspired by https://monkeytype.com. 
