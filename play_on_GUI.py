@@ -1,6 +1,7 @@
 import customtkinter
 import tkinter
 from typing_game import *
+import time
 
 # Hexadecimal colour codes used in my GUI
 LIGHT_BLUE      = "#9badbd"
@@ -106,7 +107,7 @@ def switchLightAndDark(choice):
         outputBox.tag_config('cursor', foreground = BLACK, background = MUTED_YELLOW, underline = 0)
 
 
-
+############ THE MAIN PYTHON SCRIPT STARTS HERE ############
 if __name__ == '__main__':
     (words100, words3000) = initializeFiles()
 
@@ -120,13 +121,13 @@ if __name__ == '__main__':
 # Creates the mainWindow object. This will be where we put all our widgets
     mainWindow = customtkinter.CTk(fg_color=(LGIHT_GRAY,BLACK))
     mainWindow.title("Python Typing Game, made with CustomTKInter")
-    mainWindow.geometry("1400x500")
+    mainWindow.geometry("1152x648")
     mainWindow.grid_columnconfigure((0,2), weight=0)
     mainWindow.grid_columnconfigure((1,), weight=1)
     mainWindow.grid_rowconfigure(0, weight=1)
 
 # Creates the left sidebar's frame. This acts as a visual separator and is nice to look at
-    leftSidebarFrame = customtkinter.CTkFrame(mainWindow, width=140, corner_radius=0, bg_color=(LGIHT_GRAY,DARK_GRAY))
+    leftSidebarFrame = customtkinter.CTkFrame(mainWindow, width=150, corner_radius=0, bg_color=(LGIHT_GRAY,DARK_GRAY))
     leftSidebarFrame.grid(row = 0, column = 0, sticky = 'nsew', rowspan=2)
     leftSidebarFrame.grid_rowconfigure(2, weight=1)
 
@@ -154,7 +155,7 @@ if __name__ == '__main__':
     wordCountLabel = customtkinter.CTkLabel(leftSidebarFrame, text="Current word count: 15", font=("Consolas", 20), text_color = (DEEP_BLUE, DEEP_YELLOW))
     wordCountLabel.grid(row = 3, column = 0, sticky = 'w', padx = 20, pady = 0)
 
-    wordCountSlider = customtkinter.CTkSlider(leftSidebarFrame, button_color=(DEEP_BLUE, DEEP_YELLOW), 
+    wordCountSlider = customtkinter.CTkSlider(leftSidebarFrame, button_color=(DEEP_BLUE, DEEP_YELLOW), button_hover_color=(LIGHT_BLUE,LIGHT_YELLOW),
                                               from_=1, to=50, number_of_steps=49, command=updateWordCountLabel)
     wordCountSlider.grid(row = 4, column = 0, sticky = 'w', padx = 20, pady = 0)
     wordCountSlider.set(15)
@@ -182,8 +183,8 @@ if __name__ == '__main__':
     inputEntry.grid(row = 0, column = 1, sticky = 'nw', padx=50, pady=50)
 
 # The second part is the output box, where we print out the "graded" text that we get from TypingTracker
-    outputBox = customtkinter.CTkTextbox(mainWindow, corner_radius=10, wrap='word', border_spacing=100,
-                                         fg_color=(WHITE, DARK_DARK_GRAY), font=('Consolas', 28), text_color = (DEEP_BLUE, WHITE))
+    outputBox = customtkinter.CTkTextbox(mainWindow, corner_radius=10, wrap='word', border_spacing=70,
+                                         fg_color=(WHITE, DARK_DARK_GRAY), font=('Cascadia Mono', 28), text_color = (DEEP_BLUE, WHITE))
     outputBox.insert('end', myTracker.correctWordString)
     outputBox.tag_config('red', foreground=WARNING_RED, underline = 1)
     outputBox.tag_config('grey', foreground=GRAY, underline = 0)
@@ -197,7 +198,7 @@ if __name__ == '__main__':
     progressLabel = customtkinter.CTkLabel(mainWindow, bg_color=(WHITE,DARK_DARK_GRAY), fg_color='transparent',
                                            font = ("Consolas", 20), text_color = (DEEP_BLUE,DEEP_YELLOW), 
                                            text = f"{myTracker.index} / {myTracker.numChars}", )
-    progressLabel.grid(row = 0, column = 1, sticky = 's', pady=70)
+    progressLabel.grid(row = 0, column = 1, sticky = 'nw', pady=40, padx=80)
 
 # Creates the right sidebar's frame. This is another visual separator, nice to look at.
 # The following three widgets fit inside this frame
