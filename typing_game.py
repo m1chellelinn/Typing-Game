@@ -92,9 +92,10 @@ class TypingTracker (object):
             self.currentCorrectChars[self.index] = True if (self.correctWordString[self.index] == ' ') else False
                 
             if self.index > 0:
-                while (not self.correctWordString[self.index - 1] == ' '):
-                    self.index += 1
+                while (self.index < len(self.correctWordString) and not self.correctWordString[self.index - 1] == ' '):
                     self.currentWordString += ' '
+                    self.currentCorrectChars[self.index] = True if (self.correctWordString[self.index] == ' ') else False
+                    self.index += 1
         else:
             self.currentWordString += input
             if input == self.correctWordString[self.index]:

@@ -25,12 +25,16 @@ def processInput(char, action):
         
         if (action == '0'):
             myTracker.processInput('del')
+
+
         elif (action == '1'):
             myTracker.processInput(char)
+            
         elif (action == '-1'):
             if (not inputEntry.focus_get() == '.!ctkframe.!ctkentry.!entry'):
                 inputEntry.focus_set()
             return True
+        
         # else: do nothing
         
         # unlock the textbox for modification
@@ -121,9 +125,10 @@ if __name__ == '__main__':
 # Creates the mainWindow object. This will be where we put all our widgets
     mainWindow = customtkinter.CTk(fg_color=(LGIHT_GRAY,BLACK))
     mainWindow.title("Python Typing Game, made with CustomTKInter")
-    mainWindow.geometry("1152x648")
-    mainWindow.grid_columnconfigure((0,2), weight=0)
-    mainWindow.grid_columnconfigure((1,), weight=1)
+    mainWindow.geometry("1400x450")
+    mainWindow.grid_columnconfigure(0, weight=0)
+    mainWindow.grid_columnconfigure(1, weight=10)
+    mainWindow.grid_columnconfigure(2, weight=1)
     mainWindow.grid_rowconfigure(0, weight=1)
 
 # Creates the left sidebar's frame. This acts as a visual separator and is nice to look at
@@ -141,10 +146,10 @@ if __name__ == '__main__':
     titleLabel = customtkinter.CTkLabel(leftSidebarFrame, text="Typing Game", font=("Verdana", 30, tkinter.font.BOLD), text_color = (DEEP_BLUE, DEEP_YELLOW))
     titleLabel.grid(row = 0, column = 0, padx = 10, pady = 10, sticky='nw')
 
-    instructionsLabel = customtkinter.CTkLabel(leftSidebarFrame, text="Instructions", font=("Verdana", 20), text_color = (DEEP_BLUE, DEEP_YELLOW))
+    instructionsLabel = customtkinter.CTkLabel(leftSidebarFrame, text="Instructions", font=("Verdana", 20, tkinter.font.BOLD), text_color = (DEEP_BLUE, DEEP_YELLOW))
     instructionsLabel.grid(row = 1, column = 0, padx = 10, pady = 0, sticky = 'w')
 
-    instructionsDescription = customtkinter.CTkLabel(leftSidebarFrame, font=("Verdana", 14), text_color = (DEEP_BLUE, DEEP_YELLOW), justify = 'left',
+    instructionsDescription = customtkinter.CTkLabel(leftSidebarFrame, font=("Consolas", 16), text_color = (DEEP_BLUE, DEEP_YELLOW), justify = 'left',
                                                      text = "- Type the phrase in the middle!\n- Timer starts whenever you start\n" + 
                                                             "- Want a new phrase?\n   Choose a word count and\n   press \"Restart\" below!")
     instructionsDescription.grid(row = 2, column = 0, padx = 10, pady = 0, sticky = 'nw')
@@ -152,7 +157,7 @@ if __name__ == '__main__':
 # These following are a word count label - displays the current selected word count
 # a word count slider, where the user inputs the desired word count
 # and a word count set button, which, on press, starts a new game with the chosen word count
-    wordCountLabel = customtkinter.CTkLabel(leftSidebarFrame, text="Current word count: 15", font=("Consolas", 20), text_color = (DEEP_BLUE, DEEP_YELLOW))
+    wordCountLabel = customtkinter.CTkLabel(leftSidebarFrame, text="Current word count: 16", font=("Consolas", 20), text_color = (DEEP_BLUE, DEEP_YELLOW))
     wordCountLabel.grid(row = 3, column = 0, sticky = 'w', padx = 20, pady = 0)
 
     wordCountSlider = customtkinter.CTkSlider(leftSidebarFrame, button_color=(DEEP_BLUE, DEEP_YELLOW), button_hover_color=(LIGHT_BLUE,LIGHT_YELLOW),
@@ -179,6 +184,7 @@ if __name__ == '__main__':
 # process this input and print it to the box in the second part
     inputEntry = customtkinter.CTkEntry(master=mainWindow, validate='all', width=0, height=0)
     validationCommandName = inputEntry.register(processInput)
+    inputEntry.insert('0', ' '*1000)
     inputEntry.configure(validatecommand=(validationCommandName, '%S', '%d'))
     inputEntry.grid(row = 0, column = 1, sticky = 'nw', padx=50, pady=50)
 
@@ -202,7 +208,7 @@ if __name__ == '__main__':
 
 # Creates the right sidebar's frame. This is another visual separator, nice to look at.
 # The following three widgets fit inside this frame
-    rightSidebarFrame = customtkinter.CTkFrame(mainWindow, width = 200, corner_radius=0, bg_color=(WHITE, DARK_GRAY))
+    rightSidebarFrame = customtkinter.CTkFrame(mainWindow, width = 400, corner_radius=0, bg_color=(WHITE, DARK_GRAY))
     rightSidebarFrame.grid(row = 0, column = 2, sticky = 'nsew', rowspan=2)
     rightSidebarFrame.rowconfigure(1, weight=1)
 
@@ -211,7 +217,7 @@ if __name__ == '__main__':
     feedbackLabel.grid(row = 0, column = 0, sticky = 'nw', padx = 5, pady = 20)
 
 # A label with smaller text this time, detailing every stat that we get out of TypingTracker.calculateStats
-    feedbackDescription = customtkinter.CTkLabel(rightSidebarFrame, text="play a round to find out!", font = ("Consolas", 14), justify = 'left', text_color = (DEEP_BLUE, DEEP_YELLOW))
+    feedbackDescription = customtkinter.CTkLabel(rightSidebarFrame, text="Play a round to find out!", font = ("Consolas", 17), justify = 'left', text_color = (DEEP_BLUE, DEEP_YELLOW))
     feedbackDescription.grid(row = 1, column = 0, sticky = 'nw', padx = 5, pady = 0)
     
 
